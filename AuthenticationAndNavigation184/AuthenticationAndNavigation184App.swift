@@ -1,17 +1,21 @@
 //
-//  AuthenticationAndNavigation184App.swift
-//  AuthenticationAndNavigation184
-//
-//  Created by Nadav Avital on 10/16/24.
-//
-
 import SwiftUI
+import FirebaseCore
+import GoogleSignIn
 
 @main
 struct AuthenticationAndNavigation184App: App {
+    init() {
+        // Firebase initialization
+        FirebaseApp.configure()
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().onOpenURL { url in
+                //Handle Google Oauth URL
+                GIDSignIn.sharedInstance.handle(url)
+            }
         }
     }
 }

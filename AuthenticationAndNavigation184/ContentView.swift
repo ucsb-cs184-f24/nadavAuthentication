@@ -1,21 +1,31 @@
-//
-//  ContentView.swift
-//  AuthenticationAndNavigation184
-//
-//  Created by Nadav Avital on 10/16/24.
-//
-
 import SwiftUI
+import FirebaseAuth
 
 struct ContentView: View {
+    @State private var userLoggedIn = (Auth.auth().currentUser != nil)
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if userLoggedIn {
+                TabView{
+                    Home()
+                        .tabItem {Label("Home", systemImage: "house")}
+                    Email()
+                        .tabItem {Label("Email", systemImage: "envelope")}
+                }
+            } else {
+                Login()
+            }
+        }.onAppear{
+            //Firebase state change listeneer
+            Auth.auth().addStateDidChangeListener{ auth, user in
+                if (user != nil) {
+                    userLoggedIn = true
+                } else {
+                    userLoggedIn = false
+                }
+            }
         }
-        .padding()
     }
 }
 
